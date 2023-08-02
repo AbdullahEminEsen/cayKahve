@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-lg-12 margin-tb">
                 <div class="pull-right mb-2">
-                    <a class="btn btn-success" href="{{ route('products.create') }}"> Create Product</a>
+                    <a class="btn btn-success" href="{{ route('roles.create') }}"> Create role</a>
                 </div>
             </div>
         </div>
@@ -20,29 +20,24 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>Product Name</th>
-            <th>Product Image</th>
+            <th>role Name</th>
+            <th>role Permission</th>
             @auth
                 <th width="280px">Action</th>
             @endauth
         </tr>
         </thead>
         <tbody>
-        @foreach ($products as $product)
+        @foreach ($roles as $role)
             <tr>
-                <td>{{ $product->id }}</td>
-                <td>{{ $product->name }}</td>
-                <td>
-                    @if ($product->image)
-                        <img src="{{ asset('images/' . $product->image) }}" alt="Product Image" style="max-width: 100px">
-                    @else
-                        No Image Available
-                    @endif
-                </td>
+                <td>{{ $role->id }}</td>
+                <td>{{ $role->name }}</td>
+                <td>{{ $role->permission }}</td>
+
                 @auth
                     <td>
-                        <form action="{{ route('products.destroy',$product->id) }}" method="Post">
-                            <a class="btn btn-primary" href="{{ route('products.edit',$product->id) }}">Edit</a>
+                        <form action="{{ route('roles.destroy',$role->id) }}" method="Post">
+                            <a class="btn btn-primary" href="{{ route('roles.edit',$role->id) }}">Edit</a>
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Delete</button>
@@ -54,5 +49,4 @@
         @endforeach
         </tbody>
     </table>
-    {!! $products->links() !!}
 </div>

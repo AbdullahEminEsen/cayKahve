@@ -3,12 +3,11 @@
 <div class="container mt-2">
     <div class="row">
         <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Edit Product</h2>
+            <div class="pull-left mb-2">
+                <h2>Office Anime</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('products.index') }}" enctype="multipart/form-data">
-                    Back</a>
+                <a class="btn btn-primary" href="{{ route('offices.index') }}"> Back</a>
             </div>
         </div>
     </div>
@@ -17,15 +16,13 @@
             {{ session('status') }}
         </div>
     @endif
-    <form action="{{ route('products.update',$data->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('offices.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        @method('PUT')
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
-                    <strong>Product Name:</strong>
-                    <input type="text" name="name" value="{{ $data->name }}" class="form-control"
-                           placeholder="Product Name">
+                    <strong>Office Name:</strong>
+                    <input type="text" name="name" class="form-control" placeholder="Office Name">
                     @error('name')
                     <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                     @enderror
