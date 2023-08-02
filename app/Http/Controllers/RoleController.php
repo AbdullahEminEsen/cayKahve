@@ -55,17 +55,6 @@ class RoleController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Role  $role): View
-    {
-        return view('roles.show',compact('role'));
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  Role  $role
@@ -104,7 +93,7 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Role  $role
+     * @param  Role  $role
      * @return \Illuminate\Http\Response
      */
     public function destroy(Role  $role)
