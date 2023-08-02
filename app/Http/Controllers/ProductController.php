@@ -2,22 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Store\StoreProductRequest;
+use App\Http\Requests\Update\UpdateProductRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index','show']] );
+    }
+
     public function index()
     {
 
         $products = Product::orderBy('id','asc')->paginate(5);
         return view('products.index', compact('products'));
     }
-    public function __construct()
-    {
-        $this->middleware('auth', ['except' => ['index','show']] );
-    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -25,43 +29,36 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        $modulConf = [
+            'title' => 'Ürün Ekle',
+        ];
+        return view('products.create', ['modulConf' => $modulConf]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  StoreProductRequest  $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request): RedirectResponse
     {
-        $request->validate([
-            'product_name' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        Product::create($request->validated());
 
-        $productData = $request->except('image'); // Exclude the image from the request data
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time().'.'.$image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $productData['image'] = $imageName;
-        }
-
-        Product::create($productData);
-
-
-        return redirect()->route('products.index')->with('success','Product has been created successfully.');
+        return to_route('products.index')
+            ->with('toastr', [
+                'success',
+                'Yeni kayıt başarılı bir şekilde eklendi.',
+            ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Product  $product
+     * @param  Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product  $product)
+    public function show(Product  $product): View
     {
         return view('products.show',compact('product'));
     }
@@ -69,31 +66,37 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Product  $product
+     * @param  Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product  $product)
+    public function edit(Product  $product): View
     {
-        return view('products.edit',compact('product'));
+        $modulConf = [
+            'title' => 'Ürün Düzenle',
+        ];
+
+        return view('products.edit', [
+            'modulConf' => $modulConf,
+            'data' => $product,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param  UpdateProductRequest  $request
+     * @param  Product  $product
+     * @return RedirectResponse
      */
-    public function update(Request $request, Product  $product)
+    public function update(UpdateProductRequest $request, Product  $product): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-        ]);
+        $product->update($request->validated());
 
-        $product->fill($request->post())->save();
-
-        return redirect()->route('products.index')->with('success','Product Has Been updated successfully');
+        return to_route('products.edit', $product->id)
+            ->with('toastr', [
+                'success',
+                'Kayıt başarılı bir şekilde güncellendi.',
+            ]);
     }
 
     /**

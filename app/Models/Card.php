@@ -11,8 +11,6 @@ class Card extends Model
 
     protected $fillable = [
         'product_id',
-        'quantity',
-        'status',
         'user_id'
     ];
 }

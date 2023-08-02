@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Siparis extends Model
+class Order extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'office_id',
+        'user_id',
         'product_id',
         'status',
         'description',

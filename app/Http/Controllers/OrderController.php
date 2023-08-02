@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Siparis;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
-class SiparisController extends Controller
+class OrderController extends Controller
 {
     public function index()
     {
-        $siparises = Siparis::orderBy('id','asc')->paginate(5);
+        $siparises = Order::orderBy('id','asc')->paginate(5);
         return view('siparises.index', compact('siparises'));
     }
     public function __construct()
@@ -36,14 +36,15 @@ class SiparisController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'office_name' => 'required',
-            'urun' => 'required',
-            'durum' => 'required',
-            'description' => 'required',
+            'user_id',
+            'product_id',
+            'status',
+            'description',
+            'card_id'
         ]);
 
 
-        return redirect()->route('siparises.index')->with('success','Siparis has been created successfully.');
+        return redirect()->route('siparises.index')->with('success','Order has been created successfully.');
     }
 
     /**
@@ -52,7 +53,7 @@ class SiparisController extends Controller
      * @param  \App\Siparis  $siparis
      * @return \Illuminate\Http\Response
      */
-    public function show(Siparis $siparis)
+    public function show(Order $siparis)
     {
         return view('siparises.show',compact('siparis'));
     }
@@ -63,7 +64,7 @@ class SiparisController extends Controller
      * @param  \App\Siparis  $siparis
      * @return \Illuminate\Http\Response
      */
-    public function edit(Siparis $siparis)
+    public function edit(Order $siparis)
     {
         return view('siparises.edit',compact('siparis'));
     }
@@ -75,17 +76,18 @@ class SiparisController extends Controller
      * @param  \App\Siparis  $siparis
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Siparis  $siparis)
+    public function update(Request $request, Order $siparis)
     {
         $request->validate([
-            'office_name' => 'required',
-            'urun' => 'required',
-            'description' => 'required',
+            'office_id',
+            'product_id',
+            'description',
+            'card_id'
         ]);
 
         $siparis->fill($request->post())->save();
 
-        return redirect()->route('siparises.index')->with('success','Siparis Has Been updated successfully');
+        return redirect()->route('siparises.index')->with('success','Order Has Been updated successfully');
     }
 
     /**
@@ -94,9 +96,9 @@ class SiparisController extends Controller
      * @param  \App\Siparis  $siparis
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Siparis  $siparis)
+    public function destroy(Order $siparis)
     {
         $siparis->delete();
-        return redirect()->route('siparises.index')->with('success','Siparis has been deleted successfully');
+        return redirect()->route('siparises.index')->with('success','Order has been deleted successfully');
     }
 }
