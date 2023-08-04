@@ -20,7 +20,7 @@ class RoleController extends Controller
     public function index()
     {
 
-        $roles = Role::orderBy('id','asc')->paginate(5);
+        $roles = Role::orderBy('id','asc')->get();
         return view('roles.index', compact('roles'));
     }
 
@@ -32,7 +32,7 @@ class RoleController extends Controller
     public function create()
     {
         $modulConf = [
-            'title' => 'Ürün Ekle',
+            'title' => 'Rol Ekle',
         ];
         return view('roles.create', ['modulConf' => $modulConf]);
     }
@@ -63,7 +63,7 @@ class RoleController extends Controller
     public function edit(Role  $role): View
     {
         $modulConf = [
-            'title' => 'Ürün Düzenle',
+            'title' => 'Rol Düzenle',
         ];
 
         return view('roles.edit', [
@@ -101,4 +101,6 @@ class RoleController extends Controller
         $role->delete();
         return redirect()->route('roles.index')->with('success','Role has been deleted successfully');
     }
+
+
 }

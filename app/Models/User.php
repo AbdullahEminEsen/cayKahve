@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     const ROLE_ADMIN = 1;
     const ROLE_USER = 2;
@@ -26,7 +28,7 @@ class User extends Authenticatable
         'password',
         'office_id',
         'order_id',
-        'role',
+        'role_id',
     ];
 
     /**
@@ -48,4 +50,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function office()
+    {
+        return $this->hasOne(Office::class, 'id', 'office_id');
+    }
 }

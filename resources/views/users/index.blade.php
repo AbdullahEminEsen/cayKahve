@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-lg-12 margin-tb">
                 <div class="pull-right mb-2">
-                    <a class="btn btn-success" href="{{ route('products.create') }}"> Create Product</a>
+                    <a class="btn btn-success" href="{{ route('users.create') }}"> Create user</a>
                 </div>
             </div>
         </div>
@@ -20,29 +20,30 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>Product Name</th>
-            <th>Product Image</th>
+            <th>user Name</th>
+            <th>user email</th>
+            <th>user office</th>
+            <th>user order</th>
+            <th>user role</th>
             @auth
                 <th width="280px">Action</th>
             @endauth
         </tr>
         </thead>
         <tbody>
-        @foreach ($products as $product)
+        @foreach ($users as $user)
             <tr>
-                <td>{{ $product->id }}</td>
-                <td>{{ $product->name }}</td>
-                <td>
-                    @if ($product->image)
-                        <img src="{{ asset('images/' . $product->image) }}" alt="Product Image" style="max-width: 100px">
-                    @else
-                        No Image Available
-                    @endif
-                </td>
+                <td>{{ $user->id }}</td>
+                <td>{{ $user->name }}</td>
+                <td>{{ $user->email }}</td>
+                <td>{{ $user->office->name }}</td>
+                <td>{{ $user->order_id }}</td>
+                <td>{{ $user->role->name }}</td>
+
                 @auth
                     <td>
-                        <form action="{{ route('products.destroy',$product->id) }}" method="Post">
-                            <a class="btn btn-primary" href="{{ route('products.edit',$product->id) }}">Edit</a>
+                        <form action="{{ route('users.destroy',$user->id) }}" method="Post">
+                            <a class="btn btn-primary" href="{{ route('users.edit',$user->id) }}">Edit</a>
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Delete</button>
@@ -54,5 +55,4 @@
         @endforeach
         </tbody>
     </table>
-    {!! $products->links() !!}
 </div>

@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedBigInteger('office_id')->nullable()->default(0);
+            $table->unsignedBigInteger('office_id')->nullable()->default(1);
             $table->unsignedBigInteger('order_id')->nullable()->default(0);
-            $table->integer('role')->nullable()->default(0);
+            $table->integer('role_id')->nullable()->default(1);
             $table->rememberToken();
             $table->timestamps();
 

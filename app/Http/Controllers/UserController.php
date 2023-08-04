@@ -3,22 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Store\StoreUserRequest;
+use App\Http\Requests\Update\UpdateUserRequest;
 use App\Models\Office;
+use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-
-        $users = User::orderBy('id','asc');
-        return view('users.index', compact('users'));
-    }
     public function __construct()
     {
         $this->middleware('auth', ['except' => ['index','show']] );
     }
+
+    public function index()
+    {
+
+        $users = User::orderBy('id','asc')->get();
+        return view('users.index', compact('users'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -26,78 +33,75 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $offices = Office::orderBy('id','asc')->get();
+        $roles = Role::orderBy('id','asc')->get();
+        $modulConf = [
+            'title' => 'Kullanıcı Ekle',
+        ];
+        return view('users.create', ['modulConf' => $modulConf], compact('offices', 'roles'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  StoreUserRequest  $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
 
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-            'office_id' => 'required',
-            'order_id' => 'required',
-            'role' => 'required',
-        ]);
-        return redirect()->route('users.index')->with('success','User has been created successfully.');
-    }
+        User::create($request->validated());
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User  $user)
-    {
-        return view('users.show',compact('user'));
+        return to_route('users.index')
+            ->with('toastr', [
+                'success',
+                'Yeni kullanıcı başarılı bir şekilde eklendi.',
+            ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User  $user)
+    public function edit(User  $user): View
     {
-        return view('users.edit',compact('user'));
+        $offices = Office::orderBy('id','asc')->get();
+        $roles = Role::orderBy('id','asc')->get();
+
+        $modulConf = [
+            'title' => 'Kullanıcı Düzenle',
+        ];
+
+        return view('users.edit', [
+            'modulConf' => $modulConf,
+            'data' => $user,
+        ], compact('offices', 'roles'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
+     * @param  UpdateUserRequest  $request
+     * @param  User  $user
+     * @return RedirectResponse
      */
-    public function update(Request $request, User  $user)
+    public function update(UpdateUserRequest  $request, User  $user): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-            'office_id' => 'required',
-            'order_id' => 'required',
-            'role' => 'required',
-        ]);
+        $user->update($request->validated());
 
-        $user->fill($request->post())->save();
-
-        return redirect()->route('users.index')->with('success','User Has Been updated successfully');
+        return to_route('users.edit', $user->id)
+            ->with('toastr', [
+                'success',
+                'Kullanıcı başarılı bir şekilde güncellendi.',
+            ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
+     * @param  User  $user
      * @return \Illuminate\Http\Response
      */
     public function destroy(User  $user)
