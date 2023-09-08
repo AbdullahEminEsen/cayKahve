@@ -23,13 +23,15 @@ class StoreOfficeRequest extends FormRequest
     {
         return [
             'name' => 'required|min:2',
+            'kat' => 'required',
         ];
     }
     public function messages(): array
     {
         return [
             'name.required' => 'Ofis Adı zorunludur',
-            'name.min' => 'Ofis Adı en az :min karakterden oluşmak zorundadır.',
+            'kat.required' => 'Ofis kat bilgisi zorunludur',
+            'name.min' => 'Ofis Adı en az :min karakterden oluşmak zorundadır',
         ];
     }
 }

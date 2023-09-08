@@ -1,5 +1,7 @@
-@extends('auth.layouts.header')
-<style>
+@extends('layouts.app')
+
+@section('content')
+    <style>
     .vertical-shadow {
         box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
         position: absolute;
@@ -36,3 +38,4 @@
         </div>
     </div>
 </div>
+@endsection

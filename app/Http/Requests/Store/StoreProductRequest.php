@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class StoreProductRequest extends FormRequest
 {
@@ -30,38 +32,31 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'name.required' => 'Ürün Adı zorunludur',
-            'name.min' => 'Ürün Adı en az :min karakterden oluşmak zorundadır.',
-            'image.max' => 'Resim boyutu en çok :max olabilir.',
-            'image.mimes' => 'Resim türü :mimes biri olmalıdır.',
+            'name.min' => 'Ürün Adı en az :min karakterden oluşmak zorundadır',
+            'image.max' => 'Resim boyutu en çok :max olabilir',
+            'image.mimes' => 'Resim türü :mimes biri olmalıdır',
         ];
     }
 
-//    protected function passedValidation(): StoreProductRequest
-//    {
-//        $year = date('Y');
-//        $month = date('m');
-//        $image = $this->file('image');
-//
-//        $imageName = hash('sha256', date('Y-m-d H:i:s').rand(0, 9999999)).'.'.$image->getClientOriginalExtension();
-//
-//        $directoryPath = 'images/'.$year.'/'.$month;
-//        $filePath = $directoryPath.'/'.$imageName;
-//
-//        Storage::disk('public')->makeDirectory($directoryPath, 0755, true);
-//
-//        Image::make($image->getRealPath())
-//            ->resize(800, 600, function ($constraint) {
-//                $constraint->aspectRatio(); // Orantılı boyutlandırma
-//                $constraint->upsize(); // Yükseltme
-//            })
-//            ->save(storage_path('app/public/'.$filePath));
-//
-//        $data = $this->validator->getData();
-//        $this->validator->setData([
-//                'image' => $year.'/'.$month.'/'.$imageName,
-//
-//            ] + $data);
-//
-//        return $this;
-//    }
+    protected function passedValidation(): StoreProductRequest
+    {
+        $image = $this->file('image');
+
+        $imageName = hash('sha256', date('Y-m-d H:i:s').rand(0, 9999999)).'.'.$image->getClientOriginalExtension();
+
+        Image::make($image->getRealPath())
+            ->resize(800, 600, function ($constraint) {
+                $constraint->aspectRatio(); // Orantılı boyutlandırma
+                $constraint->upsize(); // Yükseltme
+            })
+            ->save(public_path('images/' . $imageName));
+
+        $data = $this->validator->getData();
+        $this->validator->setData([
+                'image' => 'images/' . $imageName,
+
+            ] + $data);
+
+        return $this;
+    }
 }

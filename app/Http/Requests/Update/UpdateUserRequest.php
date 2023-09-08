@@ -34,7 +34,7 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name.required' => 'Kullanıcı Adı zorunludur',
-            'name.min' => 'Kullanıcı Adı en az :min karakterden oluşmak zorundadır.',
+            'name.min' => 'Kullanıcı Adı en az :min karakterden oluşmak zorundadır',
             'email.required' => 'Kullanıcı Maili zorunludur',
             'password.required' => 'Kullanıcı Şifresi zorunludur',
             'password.min' => 'Kullanıcı Şifresi en az :min karakter uzunluğunda olmalıdır',

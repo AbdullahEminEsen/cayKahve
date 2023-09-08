@@ -26,7 +26,7 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'name.required' => 'Ürün Adı zorunludur',
-            'name.min' => 'Ürün Adı en az :min karakterden oluşmak zorundadır.',
+            'name.min' => 'Ürün Adı en az :min karakterden oluşmak zorundadır',
         ];
     }
 }

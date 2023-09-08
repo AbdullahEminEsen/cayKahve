@@ -1,61 +1,43 @@
 @extends('layouts.app')
 
 @section('content')
-    <div style="display: flex; justify-content: space-around">
-        <img src="çay.png" alt=""
-             style="max-width: 40%;"
-             data-toggle="modal"
-             data-target="#exampleModal">
-
-        <img src="kahve.png" alt="" style="max-width: 40%;">
-    </div>
-
-    <button type="button"
-            class="btn btn-primary"
-            data-toggle="modal"
-            data-target="#exampleModal" style="display: none">
-        Show image
-    </button>
-    <div class="modal fade"
-         id="exampleModal"
-         tabindex="-1"
-         role="dialog"
-         aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-
-                <!-- Add image inside the body of modal -->
-                <div class="modal-body">
-                    çay deneme
+    <style>
+        .fitImage{
+            aspect-ratio: 1;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 25px;
+        }
+        .productFont{
+            font-family: 'Brush Script MT';
+            font-size: 40px;
+        }
+    </style>
+    <div class="container">
+        <div class="d-flex justify-center row">
+            @foreach ($products as $product)
+                <div class="bg-gray-200 mx-5 px-5 mt-5 py-3 rounded-lg col-md-3">
+                    <form action="{{ route('orders.create') }}" method="GET">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <div class="d-flex flex-column align-items-center">
+                            @if ($product->image)
+                                <img src="{{ asset($product->image) }}" class="fitImage" alt="Product Image">
+                            @else
+                                No Image Available
+                            @endif
+                            <div class="flex items-center mx-auto mt-2 productFont">
+                                {{ $product->name }}
+                            </div>
+                            <div class="mt-2">
+                                <label for="quantity">Miktar:</label>
+                                <input type="number" class="rounded text-center" name="quantity" id="quantity" value="1" min="1">
+                            </div>
+                            <button type="submit" class="btn bg-info btn-primary mt-2">Sipariş Ver</button>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="modal-footer">
-                    <button type="button"
-                            class="btn btn-secondary"
-                            data-dismiss="modal">
-                        Close
-                    </button>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
-    <!-- Adding scripts to use bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity=
-                "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous">
-    </script>
-    <script src=
-                "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity=
-                "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous">
-    </script>
-    <script src=
-                "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity=
-                "sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous">
-    </script>
 @endsection

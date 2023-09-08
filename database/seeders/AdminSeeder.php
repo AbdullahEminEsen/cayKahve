@@ -17,6 +17,8 @@ class AdminSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => '$2y$10$XJFssAC9a4CgXX5.bfs3Peul0paUpiBJM.MKCKPvO2vGezSzGkJSS', //password
-        ])->assignRole('writer', 'admin');
+            'office_id' => '1',
+            'role_id' => '1',
+        ])->assignRole('admin');
     }
 }

@@ -1,5 +1,7 @@
 @extends('layouts.app')
-<style>
+
+@section('content')
+    <style>
     .vertical-shadow {
         box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
         position: absolute;
@@ -24,3 +26,4 @@
         <div class="text-center w-100 mt-4" style="font-weight: bold; font-size: 30px">{{$product->name}}</div>
     </div>
 </div>
+@endsection

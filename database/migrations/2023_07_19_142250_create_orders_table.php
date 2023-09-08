@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
-            $table->string('status');
+            $table->integer('quantity');
+            $table->integer('status')->nullable()->default('0');
             $table->string('description')->nullable();
-            $table->unsignedBigInteger('card_id');
             $table->timestamps();
         });
     }

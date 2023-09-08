@@ -27,10 +27,11 @@ class OfficeController extends Controller
      */
     public function create()
     {
+        $katlar = [3,2,1,-2,-3];
         $modulConf = [
             'title' => 'Ofis Ekle',
         ];
-        return view('offices.create', ['modulConf' => $modulConf]);
+        return view('offices.create', ['modulConf' => $modulConf], compact('katlar'));
     }
 
     /**
@@ -58,6 +59,7 @@ class OfficeController extends Controller
      */
     public function edit(Office  $office): View
     {
+        $katlar = [3,2,1,-2,-3];
         $modulConf = [
             'title' => 'Ofis Düzenle',
         ];
@@ -65,6 +67,7 @@ class OfficeController extends Controller
         return view('offices.edit', [
             'modulConf' => $modulConf,
             'data' => $office,
+            'katlar' => $katlar,
         ]);
     }
 

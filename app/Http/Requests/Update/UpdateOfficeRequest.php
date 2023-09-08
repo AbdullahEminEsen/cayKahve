@@ -23,14 +23,16 @@ class UpdateOfficeRequest extends FormRequest
     {
         return [
             'name' => 'required|min:2|max:30',
+            'kat' => 'required',
         ];
     }
     public function messages(): array
     {
         return [
             'name.required' => 'Ofis Adı zorunludur',
-            'name.min' => 'Ofis Adı en az :min karakterden oluşmak zorundadır.',
-            'name.max' => 'Ofis Adı en fazla :max karakterden oluşmak zorundadır.',
+            'kat.required' => 'Ofis kat bilgisi zorunludur',
+            'name.min' => 'Ofis Adı en az :min karakterden oluşmak zorundadır',
+            'name.max' => 'Ofis Adı en fazla :max karakterden oluşmak zorundadır',
         ];
     }
 }

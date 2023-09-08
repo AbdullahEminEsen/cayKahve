@@ -30,7 +30,7 @@ class StoreRoleRequest extends FormRequest
     {
         return [
             'name.required' => 'Rol Adı zorunludur',
-            'name.min' => 'Rol Adı en az :min karakterden oluşmak zorundadır.',
+            'name.min' => 'Rol Adı en az :min karakterden oluşmak zorundadır',
         ];
     }
 }

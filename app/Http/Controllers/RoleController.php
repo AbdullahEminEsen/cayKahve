@@ -3,104 +3,71 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Store\StoreRoleRequest;
-use App\Http\Requests\Update\UpdateRoleRequest;
-use App\Models\Role;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth', ['except' => ['index','show']] );
-    }
-
     public function index()
     {
-
-        $roles = Role::orderBy('id','asc')->get();
+        $roles = Role::whereNotIn('name', ['admin'])->get();
         return view('roles.index', compact('roles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        $modulConf = [
-            'title' => 'Rol Ekle',
-        ];
-        return view('roles.create', ['modulConf' => $modulConf]);
+        return view('roles.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  StoreRoleRequest  $request
-     * @return RedirectResponse
-     */
-    public function store(StoreRoleRequest $request): RedirectResponse
+    public function store(Request $request)
     {
-        Role::create($request->validated());
+        $validated = $request->validate(['name' => ['required', 'min:3']]);
+        Role::create($validated);
 
-        return to_route('roles.index')
-            ->with('toastr', [
-                'success',
-                'Yeni kayıt başarılı bir şekilde eklendi.',
-            ]);
+        return to_route('admin.roles.index')->with('message', 'Role Created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Role  $role): View
+    public function edit(Role $role)
     {
-        $modulConf = [
-            'title' => 'Rol Düzenle',
-        ];
-
+        $permissions = Permission::all();
         return view('roles.edit', [
-            'modulConf' => $modulConf,
             'data' => $role,
+            'permission' => $permissions,
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  UpdateRoleRequest  $request
-     * @param  Role  $role
-     * @return RedirectResponse
-     */
-    public function update(UpdateRoleRequest $request, Role  $role): RedirectResponse
+    public function update(Request $request, Role $role)
     {
-        $role->update($request->validated());
+        $validated = $request->validate(['name' => ['required', 'min:3']]);
+        $role->update($validated);
 
-        return to_route('roles.edit', $role->id)
-            ->with('toastr', [
-                'success',
-                'Kayıt başarılı bir şekilde güncellendi.',
-            ]);
+        return to_route('admin.roles.index')->with('message', 'Role Updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Role  $role)
+    public function destroy(Role $role)
     {
         $role->delete();
-        return redirect()->route('roles.index')->with('success','Role has been deleted successfully');
+
+        return back()->with('message', 'Role deleted.');
     }
 
+    public function givePermission(Request $request, Role $role)
+    {
+        if($role->hasPermissionTo($request->permission)){
+            return back()->with('message', 'Permission exists.');
+        }
+        $role->givePermissionTo($request->permission);
+        return back()->with('message', 'Permission added.');
+    }
+
+    public function revokePermission(Role $role, Permission $permission)
+    {
+        if($role->hasPermissionTo($permission)){
+            $role->revokePermissionTo($permission);
+            return back()->with('message', 'Permission revoked.');
+        }
+        return back()->with('message', 'Permission not exists.');
+    }
 
 }
