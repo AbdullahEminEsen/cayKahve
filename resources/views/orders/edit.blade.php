@@ -31,12 +31,11 @@
                                             <div class="w-100">
                                                 <select id="user_id" name="user_id" class="js-example-basic-single rounded-pill w-75 text-center" data-mdb-visible-options="3">
                                                     @if(auth()->user()->role_id == '1')
-
-                                                    @foreach($users as $user)
-                                                    <option @if($user->id == $data->user_id) selected @endif value="{{$user->id}}">{{$user->name}}</option>
-                                                    @endforeach
+                                                        @foreach($users as $user)
+                                                            <option @if($user->id == $data->user_id) selected @endif value="{{$user->id}}">{{$user->name}}</option>
+                                                        @endforeach
                                                     @else
-                                                        <option @if($user->id == $data->user_id) selected @endif value="{{$user->id}}">{{auth()->user()->name}}</option>
+                                                            <option @if($data->user_id) selected @endif value="{{$data->user_id}}">{{auth()->user()->name}}</option>
                                                     @endif
                                                 </select>
                                                 <div></div>
@@ -45,8 +44,8 @@
                                             <div class="w-100">
                                                 <select id="product_id" name="product_id" class="js-example-basic-single rounded-pill w-75 text-center" data-mdb-visible-options="3">
                                                     @foreach($products as $product)
-                                                    <option @if($product->id == $data->product_id) selected @endif value="{{$product->id}}">{{$product->name}}</option>
-                                                @endforeach
+                                                        <option @if($product->id == $data->product_id) selected @endif value="{{$product->id}}">{{$product->name}}</option>
+                                                    @endforeach
                                                 </select>
                                                 <div></div>
                                                 <label class="form-label" for="typeEmailX">Ürün Adı</label>

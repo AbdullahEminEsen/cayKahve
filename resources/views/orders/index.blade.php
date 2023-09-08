@@ -258,7 +258,7 @@
                     success: function (response) {
                         // Assuming the server responds with a JSON object containing the updated status
                         if (response) {
-                            alert('Sipariş durumu başarıyla güncellendi')
+                            toastr.success('Sipariş durumu başarıyla güncellendi')
                             setTimeout(function () {
                                 window.location.reload()
                             }, 1500);

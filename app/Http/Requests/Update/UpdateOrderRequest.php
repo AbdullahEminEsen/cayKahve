@@ -26,7 +26,7 @@ class UpdateOrderRequest extends FormRequest
             'product_id' => 'required',
             'quantity' => 'required',
             'description' => 'nullable',
-            'status' => 'required|in:0,1,2'
+            'status' => 'in:0,1,2'
         ];
     }
     public function messages(): array
@@ -35,7 +35,6 @@ class UpdateOrderRequest extends FormRequest
             'user_id.required' => 'Kullanıcı Adı zorunludur',
             'product_id.required' => 'Ürün Adı zorunludur',
             'quantity.required' => 'Ürün Miktarı zorunludur',
-            'status.required' => 'Sipariş Durumu zorunludur',
             'status.in' => 'Geçersiz Sipariş Durumu',
         ];
     }
