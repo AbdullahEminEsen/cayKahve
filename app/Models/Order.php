@@ -26,4 +26,9 @@ class Order extends Model
     {
         return $this->hasOne(Product::class, 'id', 'product_id');
     }
+    public function office()
+    {
+        return $this->belongsTo(Office::class);
+    }
+
 }

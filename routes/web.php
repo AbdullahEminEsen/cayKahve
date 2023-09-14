@@ -4,6 +4,7 @@ use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
@@ -30,6 +31,9 @@ Route::resource('offices', OfficeController::class)->middleware(['auth']);
 Route::resource('orders', OrderController::class)->middleware(['auth']);
 Route::get('/orders/{status?}', [OrderController::class, 'getOrdersByStatus'])->name('getOrdersByStatus');
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+Route::get('/orders/get-new-orders', [OrderController::class, 'getNewOrders'])->name('orders.get-new-orders');
+Route::get('/fetch-new-orders', [OrderController::class, 'fetchNewOrders'])->name('orders.fetch-new');
+Route::get('/generate-report', [ReportController::class, 'generateReport'])->name('generate.report');
 Route::post('/orders-update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
 
 Route::middleware(['auth'])->name('admin.')->prefix('admin')->group(function () {

@@ -31,7 +31,7 @@
                             </div>
                             <div class="mt-2">
                                 <label for="quantity">Miktar:</label>
-                                <input type="number" class="rounded text-center" name="quantity" id="quantity" value="1" min="1">
+                                <input type="number" class="rounded w-100 text-center" name="quantity" id="quantity" value="1" min="1">
                             </div>
                             <button type="submit" class="btn bg-info btn-primary mt-2">Sipariş Ver</button>
                         </div>

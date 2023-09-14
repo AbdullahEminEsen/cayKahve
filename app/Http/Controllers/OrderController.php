@@ -9,9 +9,12 @@ use App\Models\Office;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -19,28 +22,31 @@ class OrderController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index','show']] );
+        $this->middleware('auth');
     }
 
-    public function index(Order $order):View
+    public function index(Order $order): View
     {
         $status = [
-          '0' => 'Onaylanmadı',
-          '1' => 'Onaylandı',
-          '2' => 'Tamamlandı',
+            '1' => 'Onaylanmadı',
+            '2' => 'Onaylandı',
+            '3' => 'Tamamlandı',
         ];
-        $statusNames = [
-            '0' => 'Verilen Sipariş',
-            '1' => 'Onaylanan Sipariş',
-            '2' => 'Tamamlanan Sipariş'
-        ];
-        $allOrders = Order::orderBy('id','asc')->get();
 
-        $orders = null;
+        $statusNames = [
+            '1' => 'Verilen Sipariş',
+            '2' => 'Onaylanan Sipariş',
+            '3' => 'Tamamlanan Sipariş',
+        ];
+
+        $countedOrders = 0;
+        $orders = collect(); // Initialize an empty collection
+
         if (Auth::user()->role_id == 1) {
-            // For role_id == 3 (User), show all orders
-            $orders = $allOrders;
+            // For role_id == 1 (Admin), show all orders
+            $orders = Order::orderBy('id', 'desc')->get();
         } elseif (Auth::user()->role_id == 2) {
+            // For role_id == 2 (User), filter orders based on the user's office floor
             $userFloor = Auth::user()->office->kat;
 
             // Get the office IDs with the same floor
@@ -49,23 +55,25 @@ class OrderController extends Controller
             // Filter orders where the office_id is in the officesWithSameFloor array
             $users = User::whereIn('office_id', $officesWithSameFloor)->pluck('id');
 
-            $test = $allOrders->whereIn('user_id', $users);
-
-            $orders = $test;
+            $orders = Order::whereIn('user_id', $users)->orderBy('id', 'desc')->get();
         } elseif (Auth::user()->role_id == 3) {
-            $authOrder = $allOrders->whereIn('user_id', Auth::id());
-            $orders = $authOrder;
+            // For role_id == 3 (User), show their own orders created in the last 24 hours
+            $userId = Auth::id();
+            $twentyFourHoursAgo = now()->subDay();
+
+            $orders = Order::where('user_id', $userId)
+                ->where('created_at', '>=', $twentyFourHoursAgo)
+                ->orderBy('id', 'desc')
+                ->get();
         }
 
-// Now you have the filtered $orders based on user's role and office floor
-// You can proceed to use the $orders data as needed
+        $countedOrders = $orders->count();
 
-
-
-        return view('orders.index',[
+        return view('orders.index', [
             'status' => $status,
             'statusNames' => $statusNames,
             'orders' => $orders,
+            'countedOrders' => $countedOrders,
         ]);
     }
 
@@ -154,6 +162,10 @@ class OrderController extends Controller
             'title' => 'Sipariş Düzenle',
         ];
 
+        if (Gate::denies('edit-order', $order)) {
+            abort(403); // Or handle unauthorized access as needed
+        }
+
         return view('orders.edit', [
             'modulConf' => $modulConf,
             'data' => $order,
@@ -199,4 +211,20 @@ class OrderController extends Controller
         $order->delete();
         return redirect()->route('orders.index')->with('success','Order has been deleted successfully');
     }
+
+    public function getNewOrders(): JsonResponse
+    {
+        // Logic to check for new orders
+        $newOrders = $this->checkForNewOrdersLogic(); // Implement your own logic here
+
+        return response()->json(['newOrders' => $newOrders]);
+    }
+    public function fetchNewOrders()
+    {
+        // Query to fetch new orders (you'll need to define the logic here)
+        $newOrders = Order::where('created_at', '>', Carbon::now()->subSeconds(30))->get();
+
+        return response()->json(['newOrders' => $newOrders]);
+    }
+
 }

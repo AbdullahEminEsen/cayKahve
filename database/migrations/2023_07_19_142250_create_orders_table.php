@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
             $table->integer('quantity');
-            $table->integer('status')->nullable()->default('0');
+            $table->integer('status')->nullable()->default('1');
             $table->string('description')->nullable();
             $table->timestamps();
         });
