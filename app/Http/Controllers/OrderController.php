@@ -166,6 +166,10 @@ class OrderController extends Controller
             abort(403); // Or handle unauthorized access as needed
         }
 
+        if (Auth::user()->role_id == 2) {
+            abort(403); // Users with role_id 2 are not allowed to access the edit page
+        }
+
         return view('orders.edit', [
             'modulConf' => $modulConf,
             'data' => $order,
