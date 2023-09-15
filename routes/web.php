@@ -26,17 +26,17 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
-Route::resource('products', ProductController::class)->middleware(['auth']);
-Route::resource('offices', OfficeController::class)->middleware(['auth']);
+Route::resource('products', ProductController::class)->middleware(['auth', 'role:admin']);
+Route::resource('offices', OfficeController::class)->middleware(['auth', 'role:admin']);
 Route::resource('orders', OrderController::class)->middleware(['auth']);
-Route::get('/orders/{status?}', [OrderController::class, 'getOrdersByStatus'])->name('getOrdersByStatus');
+Route::get('/orders/{status?}', [OrderController::class, 'getOrdersByStatus'])->name('getOrdersByStatus')->middleware(['auth', 'role:admin']);
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
-Route::get('/orders/get-new-orders', [OrderController::class, 'getNewOrders'])->name('orders.get-new-orders');
-Route::get('/fetch-new-orders', [OrderController::class, 'fetchNewOrders'])->name('orders.fetch-new');
-Route::get('/generate-report', [ReportController::class, 'generateReport'])->name('generate.report');
-Route::post('/orders-update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
+Route::get('/orders/get-new-orders', [OrderController::class, 'getNewOrders'])->name('orders.get-new-orders')->middleware(['auth', 'role:admin']);;
+Route::get('/fetch-new-orders', [OrderController::class, 'fetchNewOrders'])->name('orders.fetch-new')->middleware(['auth', 'role:admin']);;
+Route::get('/generate-report', [ReportController::class, 'generateReport'])->name('generate.report')->middleware(['auth', 'role:admin']);;
+Route::post('/orders-update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status')->middleware(['auth', 'role:admin']);;
 
-Route::middleware(['auth'])->name('admin.')->prefix('admin')->group(function () {
+Route::middleware(['auth', 'role:admin'])->name('admin.')->prefix('admin')->group(function () {
     Route::resource('/roles', RoleController::class);
     Route::post('/roles/{role}/permissions', [RoleController::class, 'givePermission'])->name('roles.permissions');
     Route::delete('/roles/{role}/permissions/{permission}', [RoleController::class, 'revokePermission'])->name('roles.permissions.revoke');
