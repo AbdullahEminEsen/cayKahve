@@ -117,6 +117,9 @@
             </div>
         </div>
     @endif
+    <div class="d-flex justify-center mb-3 mt-3">
+        {{ $filteredOrders->appends(['office_id' => $selectedOfficeId, 'user_id' => $selectedUserId, 'product_id' => $selectedProductId, 'status' => $selectedStatus, 'start_date' => $startDate, 'end_date' => $endDate])->links() }}
+    </div>
     <script>
         // JavaScript to handle office selection
         document.addEventListener('DOMContentLoaded', function () {
