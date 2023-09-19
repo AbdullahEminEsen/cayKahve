@@ -89,6 +89,8 @@ class ReportController extends Controller
         $filteredOrders = $query->orderBy('id', 'asc')->get();
 
         $filteredOrdersCount = count($filteredOrders);
+        $filteredOrders = $query->orderBy('id', 'asc')->paginate(10);
+
 
         return view('reports.index', [
             'filteredOrders' => $filteredOrders,

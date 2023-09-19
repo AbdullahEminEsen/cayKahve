@@ -44,7 +44,7 @@ class OrderController extends Controller
 
         if (Auth::user()->role_id == 1) {
             // For role_id == 1 (Admin), show all orders
-            $orders = Order::orderBy('id', 'desc')->get();
+            $orders = Order::orderBy('id', 'desc')->paginate(10);
         } elseif (Auth::user()->role_id == 2) {
             // For role_id == 2 (User), filter orders based on the user's office floor
             $userFloor = Auth::user()->office->kat;
@@ -55,7 +55,7 @@ class OrderController extends Controller
             // Filter orders where the office_id is in the officesWithSameFloor array
             $users = User::whereIn('office_id', $officesWithSameFloor)->pluck('id');
 
-            $orders = Order::whereIn('user_id', $users)->orderBy('id', 'desc')->get();
+            $orders = Order::whereIn('user_id', $users)->orderBy('id', 'desc')->paginate(10);
         } elseif (Auth::user()->role_id == 3) {
             // For role_id == 3 (User), show their own orders created in the last 24 hours
             $userId = Auth::id();
