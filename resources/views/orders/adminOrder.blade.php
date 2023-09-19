@@ -1,4 +1,4 @@
-<div class="d-flex justify-center mt-3 mb-5">
+<div class="d-flex justify-center mt-3 mb-3">
     <button class="btn filter-btn mx-5 btn-light" data-status="all">Tüm Siparişler</button>
     <button class="btn filter-btn mx-5 btn-warning" data-status="1">Verilen Siparişler</button>
     <button class="btn filter-btn mx-5 btn-success" data-status="2">Onaylanan Siparişler</button>
@@ -12,10 +12,10 @@
     </script>
 @endif
 
-<div class="py-9">
-    <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 mb-5">
+<div>
+    <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 mb-3">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-2">
-            @auth
+            @if(auth()->user()->role_id == 1)
                 <div class="row">
                     <div class="col-lg-12 margin-tb">
                         <div class="pull-right mb-2">
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-            @endauth
+            @endif
             @if ($message = Session::get('success'))
                 <div class="alert alert-success">
                     <p>{{ $message }}</p>
@@ -158,4 +158,7 @@
             </div>
         </div>
     </div>
+</div>
+<div class="d-flex justify-center mb-3">
+    {{ $orders->links() }}
 </div>
