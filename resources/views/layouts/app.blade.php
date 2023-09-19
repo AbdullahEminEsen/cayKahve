@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
+    <link href="/assets/css/app.css" rel="stylesheet" type="text/css">
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
@@ -36,18 +36,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
     @vite('resources/css/app.css')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <style>
-        .gradient-custom {
-            /* fallback for old browsers */
-            background: #6a11cb;
-
-            /* Chrome 10-25, Safari 5.1-6 */
-            background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
-
-            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
-        }
-    </style>
 </head>
 <body>
 <div id="app">
@@ -103,5 +91,6 @@
         </main>
     </div>
 </div>
+<script src="/assets/js/app.js"></script>
 </body>
 </html>
