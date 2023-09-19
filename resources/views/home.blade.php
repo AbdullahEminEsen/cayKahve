@@ -1,18 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <style>
-        .fitImage{
-            aspect-ratio: 1;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 25px;
-        }
-        .productFont{
-            font-family: 'Brush Script MT';
-            font-size: 40px;
-        }
-    </style>
     <div class="container">
         <div class="d-flex justify-center row">
             @foreach ($products as $product)
@@ -22,7 +10,7 @@
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <div class="d-flex flex-column align-items-center">
                             @if ($product->image)
-                                <img src="{{ asset($product->image) }}" class="fitImage" alt="Product Image">
+                                <img src="{{ asset($product->image) }}" class="fitImageHome" alt="Product Image">
                             @else
                                 No Image Available
                             @endif
@@ -33,7 +21,7 @@
                                 <label for="quantity">Miktar:</label>
                                 <input type="number" class="rounded w-100 text-center" name="quantity" id="quantity" value="1" min="1">
                             </div>
-                            <button type="submit" class="btn bg-info btn-primary mt-2">Sipariş Ver</button>
+                            <button type="submit" class="btn bg-success btn-success mt-2">Sipariş Ver</button>
                         </div>
                     </form>
                 </div>

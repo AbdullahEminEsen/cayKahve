@@ -23,7 +23,7 @@
                             @endforeach
                              </span>
                         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                            <div class="card" style="border-radius: 1rem;">
+                            <div class="card card_border">
                                 <a href="{{ route('admin.roles.index') }}" class="btn btn-sm px-4 mx-lg-2 mt-2 w-25">Geri Dön</a>
                                 <div class="card-body p-5 text-center">
 
