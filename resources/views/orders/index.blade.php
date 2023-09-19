@@ -56,7 +56,7 @@
                     $(".order-row").show();
                 }
                 @if(auth()->user()->role_id == 3)
-                    if (targetStatus === 2 || targetStatus === 3){
+                    if (targetStatus !== 1){
                         $('.statusHide').addClass('d-none');
                     } else{
                         $('.statusHide').removeClass('d-none');
