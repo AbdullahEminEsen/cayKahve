@@ -1,26 +1,34 @@
 @extends('layouts.app')
-
+<style>
+    .option-padding{
+        padding: 10px 30px 10px 30px !important;
+    }
+</style>
 @section('content')
     <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 mt-3">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-2">
     <form method="get" action="{{ route('generate.report') }}">
 
-
+<div class="d-flex justify-content-evenly">
+    <div>
         <label for="office_id">Ofis Seçin:</label>
-        <select name="office_id" id="office_id" class="btn border border-dark">
+        <select name="office_id" id="office_id" class="btn border-dark option-padding">
             <option value="">Tüm Ofisler</option>
             @foreach($offices as $office)
                 <option value="{{ $office->id }}" {{ old('office_id', $selectedOfficeId) == $office->id ? 'selected' : '' }}>{{$office->name}}</option>
             @endforeach
         </select>
+    </div>
 
+    <div>
         <label for="user_id">Kullanıcı Seçin:</label>
-        <select name="user_id" id="user_id" class="btn border border-dark">
+        <select name="user_id" id="user_id" class="btn border-dark option-padding">
             <option value="">Tüm Kullanıcılar</option>
         </select>
-
+    </div>
+    <div>
         <label for="product_id">Ürün Seçin:</label>
-        <select name="product_id" id="product_id" class="btn border border-dark">
+        <select name="product_id" id="product_id" class="btn border-dark option-padding">
             <option value="">Tüm Ürünler</option>
             @foreach($products as $product)
                 <option value="{{ $product->id }}" {{ old('product_id', $selectedProductId) == $product->id ? 'selected' : '' }}>
@@ -28,8 +36,12 @@
                 </option>
             @endforeach
         </select>
+    </div>
+</div>
+<div class="d-flex justify-content-evenly mt-3">
+    <div>
         <label for="status">Sipariş Durumu:</label>
-        <select name="status" id="status" class="btn border border-dark">
+        <select name="status" id="status" class="btn border-dark option-padding">
             <option value="">Tüm Durumlar</option>
             @foreach($status as $key => $value)
                 <option value="{{ $key }}" {{ old('status', $selectedStatus) == $key ? 'selected' : '' }}>
@@ -37,12 +49,16 @@
                 </option>
             @endforeach
         </select>
-
+    </div>
+    <div>
         <label for="start_date">Başlangıç Tarihi:</label>
         <input type="date" name="start_date" id="start_date" class="btn border border-dark" value="{{ old('start_date') ? date('Y-m-d', strtotime(old('start_date'))) : '' }}">
-
+    </div>
+    <div>
         <label for="end_date">Bitiş Tarihi:</label>
         <input type="date" name="end_date" id="end_date" class="btn border border-dark" value="{{ old('end_date') }}">
+    </div>
+</div>
         <div class="d-flex justify-center">
             <button type="submit" class="my-3 py-2 px-2 btn btn-primary bg-primary d-flex">
                 <span class="svg-icon svg-icon-2 ml-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
